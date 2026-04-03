@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PropKit CRM">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PropKit CRM — CRM Head Edition</title>
@@ -2516,6 +2520,65 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   });
 });
+</script>
+
+<script>
+// ══════════════════════════════════════════
+//  PROPKIT CRM — SERVICE WORKER (Offline)
+// ══════════════════════════════════════════
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+
+  var swCode = [
+    "const CACHE='propkit-v1';",
+    "self.addEventListener('install',function(e){",
+    "  e.waitUntil(",
+    "    caches.open(CACHE).then(function(c){",
+    "      return c.add(new Request(self.location.href.split('/sw')[0]||'/',{cache:'reload'}));",
+    "    }).then(function(){ return self.skipWaiting(); })",
+    "  );",
+    "});",
+    "self.addEventListener('activate',function(e){",
+    "  e.waitUntil(caches.keys().then(function(ks){",
+    "    return Promise.all(ks.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));",
+    "  }).then(function(){return self.clients.claim();}));",
+    "});",
+    "self.addEventListener('fetch',function(e){",
+    "  if(e.request.method!=='GET')return;",
+    "  e.respondWith(",
+    "    caches.match(e.request).then(function(hit){",
+    "      if(hit)return hit;",
+    "      return fetch(e.request).then(function(r){",
+    "        if(!r||r.status!==200)return r;",
+    "        var cl=r.clone();",
+    "        caches.open(CACHE).then(function(c){c.put(e.request,cl);});",
+    "        return r;",
+    "      }).catch(function(){return caches.match('/');});",
+    "    })",
+    "  );",
+    "});"
+  ].join('\n');
+
+  try {
+    var blob = new Blob([swCode], {type:'application/javascript'});
+    var url  = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url, {scope:'./'}).then(function(reg){
+      // Cache current page on activation
+      if(reg.installing){
+        reg.installing.addEventListener('statechange', function(){
+          if(this.state==='activated' && 'caches' in window){
+            caches.open('propkit-v1').then(function(c){ c.add(window.location.href); });
+          }
+        });
+      }
+    }).catch(function(){
+      // Fallback: direct cache without SW
+      if('caches' in window){
+        caches.open('propkit-v1').then(function(c){ c.add(window.location.href); });
+      }
+    });
+  } catch(err) {}
+})();
 </script>
 
 </body>
