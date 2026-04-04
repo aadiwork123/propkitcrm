@@ -332,6 +332,7 @@ textarea{resize:vertical;min-height:65px;}
 [data-theme="light"] .ni.active{background:rgba(123,47,247,.08);color:var(--brand-violet);}
 [data-theme="light"] .mo{background:rgba(0,0,0,.35);}
 [data-theme="light"] .d-info{background:var(--bg-surface);}
+[data-theme="light"] .ld-lead-num{color:#1A1A2E;}
 
 /* ══════════════════════════════════════════
    RESPONSIVE
@@ -576,6 +577,91 @@ select option:checked{
   .lc-badge,#license-wall{display:none!important;}
   #main{margin-left:0!important;}
   .content{padding:0!important;}
+}
+
+/* ══════════════════════════════════════════
+   LEAD DETAIL / FOLLOW-UP PANEL
+══════════════════════════════════════════ */
+#ld-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:600;backdrop-filter:blur(3px);}
+#ld-overlay.open{display:block;}
+#ld-panel{position:fixed;inset:0;z-index:601;display:none;flex-direction:column;background:var(--bg-primary);overflow:hidden;transition:transform .3s cubic-bezier(.4,0,.2,1);}
+#ld-panel.open{display:flex;}
+
+/* Header */
+.ld-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);}
+.ld-lead-info{display:flex;align-items:center;gap:14px;}
+.ld-lead-name{font-family:var(--df);font-size:20px;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline;}
+.ld-lead-num{font-family:var(--db);font-size:18px;font-weight:500;color:#FFFFFF;letter-spacing:.5px;}
+.ld-lead-phone{font-size:13px;color:var(--text-secondary);}
+.ld-lead-meta{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.ld-close{width:36px;height:36px;border-radius:8px;border:1px solid var(--border-vis);background:transparent;color:var(--text-secondary);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ld-close:hover{color:var(--brand-coral);border-color:var(--brand-coral);}
+
+/* Tabs */
+.ld-tabs{display:flex;border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);padding:0 24px;}
+.ld-tab{padding:11px 20px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;user-select:none;}
+.ld-tab:hover{color:var(--text-secondary);}
+.ld-tab.active{color:var(--brand-violet);border-bottom-color:var(--brand-violet);}
+
+/* Body — two columns */
+.ld-body{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.ld-left{padding:24px;overflow-y:auto;border-right:1px solid var(--border-subtle);}
+.ld-right{padding:24px;overflow-y:auto;}
+
+/* Form fields */
+.ld-form-group{margin-bottom:16px;}
+.ld-form-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}
+.ld-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* Action buttons */
+.ld-actions{display:flex;gap:10px;margin-top:20px;}
+.ld-btn-red{flex:1;padding:12px 16px;border:none;border-radius:8px;background:var(--brand-coral);color:#fff;font-family:var(--db);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;text-transform:uppercase;letter-spacing:.5px;}
+.ld-btn-red:hover{opacity:.85;}
+.ld-btn-green{flex:1;padding:12px 16px;border:none;border-radius:8px;background:var(--accent-teal);color:#fff;font-family:var(--db);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;text-transform:uppercase;letter-spacing:.5px;}
+.ld-btn-green:hover{opacity:.85;}
+
+/* Timeline section */
+.ld-timeline-title{font-family:var(--df);font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:18px;letter-spacing:.3px;}
+.ld-timeline{position:relative;padding-left:22px;}
+.ld-timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border-vis);}
+.ld-tl-item{position:relative;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border-subtle);}
+.ld-tl-item:last-child{border-bottom:none;margin-bottom:0;}
+.ld-tl-dot{position:absolute;left:-19px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border-vis);background:var(--bg-primary);}
+.ld-tl-item.happened .ld-tl-dot{border-color:var(--accent-teal);background:var(--accent-teal);}
+.ld-tl-item.not-happened .ld-tl-dot{border-color:var(--brand-coral);background:var(--brand-coral);}
+.ld-tl-item.pending .ld-tl-dot{border-color:var(--accent-gold);background:var(--accent-gold);}
+
+.ld-tl-type{font-size:13px;font-weight:600;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;}
+.ld-tl-date{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.ld-tl-agent{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.ld-tl-badge{display:inline-block;padding:3px 12px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:6px;}
+.ld-tl-badge.yes{background:var(--accent-teal);color:#fff;}
+.ld-tl-badge.no{background:var(--brand-coral);color:#fff;}
+.ld-tl-badge.pend{background:var(--accent-gold);color:#000;}
+.ld-tl-note{margin-top:8px;font-size:12.5px;color:var(--text-secondary);line-height:1.6;font-weight:500;text-transform:uppercase;letter-spacing:.3px;}
+.ld-tl-edit{position:absolute;top:2px;right:0;width:28px;height:28px;border-radius:50%;border:1px solid var(--border-vis);background:var(--bg-surface);color:var(--accent-gold);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ld-tl-edit:hover{border-color:var(--accent-gold);background:var(--accent-gold);color:#fff;}
+
+.ld-empty{text-align:center;padding:40px 0;color:var(--text-muted);font-size:13px;}
+
+/* Lead info tab content */
+.ld-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ld-info-item{background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:8px;padding:12px 14px;}
+.ld-info-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+.ld-info-value{font-size:14px;font-weight:500;color:var(--text-primary);}
+
+/* Responsive */
+@media(max-width:768px){
+  .ld-body{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
+  .ld-left{border-right:none;border-bottom:1px solid var(--border-subtle);padding:16px;max-height:50vh;overflow-y:auto;}
+  .ld-right{padding:16px;}
+  .ld-header{padding:12px 16px;}
+  .ld-lead-name{font-size:17px;}
+  .ld-lead-num{font-size:15px;}
+  .ld-tabs{padding:0 16px;}
+  .ld-tab{padding:9px 14px;font-size:11px;}
+  .ld-form-row{grid-template-columns:1fr;}
+  .ld-info-grid{grid-template-columns:1fr;}
 }
 
 </style>
@@ -949,6 +1035,72 @@ select option:checked{
   </div>
 </div>
 
+<!-- Lead Detail / Follow-Up Panel -->
+<div id="ld-overlay" onclick="closeLeadDetail()"></div>
+<div id="ld-panel">
+  <div class="ld-header">
+    <div class="ld-lead-info">
+      <div>
+        <div class="ld-lead-name" id="ld-name">—</div> <span class="ld-lead-num" id="ld-num"></span>
+        <div class="ld-lead-phone" id="ld-phone">—</div>
+        <div class="ld-lead-meta" id="ld-meta"></div>
+      </div>
+    </div>
+    <button class="ld-close" onclick="closeLeadDetail()">×</button>
+  </div>
+  <div class="ld-tabs">
+    <div class="ld-tab active" onclick="switchLDTab('comm',this)">Communication / Activities</div>
+    <div class="ld-tab" onclick="switchLDTab('info',this)">Basic Information</div>
+  </div>
+  <div class="ld-body">
+    <!-- LEFT: Log new interaction -->
+    <div class="ld-left" id="ld-left-content">
+      <div class="ld-form-group">
+        <div class="ld-form-label">Type</div>
+        <select id="ld-type" style="width:100%">
+          <option>Call</option>
+          <option>WhatsApp</option>
+          <option>Site Visit</option>
+          <option>Email</option>
+          <option>SMS</option>
+          <option>Meeting</option>
+        </select>
+      </div>
+      <div class="ld-form-row">
+        <div class="ld-form-group">
+          <div class="ld-form-label">Date</div>
+          <input type="date" id="ld-date">
+        </div>
+        <div class="ld-form-group">
+          <div class="ld-form-label">Time</div>
+          <input type="time" id="ld-time">
+        </div>
+      </div>
+      <div class="ld-form-group">
+        <div class="ld-form-label">Location</div>
+        <input type="text" id="ld-location" placeholder="e.g. Gurgaon, Office, etc.">
+      </div>
+      <div class="ld-form-group">
+        <div class="ld-form-label">Notes / Remarks</div>
+        <textarea id="ld-remarks" placeholder="What happened? Any follow-up needed?" style="min-height:80px"></textarea>
+      </div>
+      <div class="ld-form-group">
+        <div class="ld-form-label">Next Follow-Up Date</div>
+        <input type="date" id="ld-next-date">
+      </div>
+      <div class="ld-actions">
+        <button class="ld-btn-red" onclick="logInteraction('not_happened')">✕ Did Not Happen</button>
+        <button class="ld-btn-green" onclick="logInteraction('happened')">✓ Happened</button>
+      </div>
+    </div>
+    <!-- RIGHT: Timeline -->
+    <div class="ld-right" id="ld-right-content">
+      <div class="ld-timeline-title">All Interactions</div>
+      <div class="ld-timeline" id="ld-timeline"></div>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -975,12 +1127,13 @@ function toggleTheme(){
 // ══════════════════════════════════════
 // DATA LAYER — same keys as v2 so data is preserved
 // ══════════════════════════════════════
-const K={leads:'pcrm3_leads',props:'pcrm3_props',fus:'pcrm3_fus',notes:'pcrm3_notes',svs:'pcrm3_svs',team:'pcrm3_team',settings:'pcrm3_settings',ilog:'pcrm3_ilog'};
+const K={leads:'pcrm3_leads',props:'pcrm3_props',fus:'pcrm3_fus',notes:'pcrm3_notes',svs:'pcrm3_svs',team:'pcrm3_team',settings:'pcrm3_settings',ilog:'pcrm3_ilog',interactions:'pcrm3_interactions'};
 const ld=k=>{try{return JSON.parse(localStorage.getItem(K[k]))||[];}catch{return[];}};
 const sv=(k,d)=>localStorage.setItem(K[k],JSON.stringify(d));
 const ldO=k=>{try{return JSON.parse(localStorage.getItem(K[k]))||{};}catch{return{};}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 const today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';
 const fmtD=d=>{if(!d)return'—';return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'2-digit'});};
 const weekStart=()=>{const d=new Date();d.setDate(d.getDate()-d.getDay());return d.toISOString().slice(0,10);};
 const ACT=['New','Contacted','Warm','Hot','Closed','Lost'];
@@ -1090,7 +1243,7 @@ function badge(status){
 // DASHBOARD
 // ══════════════════════════════════════
 function renderDashboard(){
-  const leads=ld('leads'),fus=ld('fus'),projs=ld('props'),svs=ld('svs'),team=ld('team');
+  const leads=ld('leads'),fus=ld('fus'),projs=ld('props'),svs=ld('svs'),team=ld('team'),allInteractions=ld('interactions');
   const s=ldO('settings');const dt=s.dailyTarget||50;const todayStr=today();
   const active=leads.filter(l=>ACT.includes(l.status));
   const hot=active.filter(l=>l.status==='Hot');
@@ -1098,13 +1251,15 @@ function renderDashboard(){
   const todayLeads=leads.filter(l=>l.date===todayStr);
   const pendFU=fus.filter(f=>f.status!=='done');
   const overdueFU=pendFU.filter(f=>f.date<todayStr);
+  const todayInteractions=allInteractions.filter(i=>i.date===todayStr);
   // stats
   document.getElementById('dash-stats').innerHTML=`
     <div class="sc" style="--acc:rgba(76,144,224,.08)"><div class="sl">Active Leads</div><div class="sv">${active.length}</div><div class="ss">${leads.filter(l=>l.status==='New').length} New</div></div>
     <div class="sc" style="--acc:rgba(224,85,85,.08)"><div class="sl">Hot 🔥</div><div class="sv" style="color:var(--red)">${hot.length}</div><div class="ss">Needs immediate action</div></div>
     <div class="sc" style="--acc:rgba(61,184,122,.08)"><div class="sl">Closed Deals</div><div class="sv" style="color:var(--green)">${closed.length}</div><div class="ss">${projs.filter(p=>p.status==='Available').length} projects available</div></div>
     <div class="sc" style="--acc:rgba(201,168,76,.08)"><div class="sl">Today Imported</div><div class="sv" style="color:var(--gold)">${todayLeads.length}</div><div class="ss">Target: ${dt} · ${Math.round(todayLeads.length/dt*100)}%</div></div>
-    <div class="sc" style="--acc:rgba(224,122,76,.08)"><div class="sl">Pending FU</div><div class="sv" style="color:${overdueFU.length>0?'var(--red)':'var(--text)'}">${pendFU.length}</div><div class="ss">${overdueFU.length>0?`<span style="color:var(--red)">⚠ ${overdueFU.length} overdue</span>`:svs.filter(sv=>sv.visitDate===todayStr).length+' visits today'}</div></div>`;
+    <div class="sc" style="--acc:rgba(224,122,76,.08)"><div class="sl">Pending FU</div><div class="sv" style="color:${overdueFU.length>0?'var(--red)':'var(--text)'}">${pendFU.length}</div><div class="ss">${overdueFU.length>0?`<span style="color:var(--red)">⚠ ${overdueFU.length} overdue</span>`:svs.filter(sv=>sv.visitDate===todayStr).length+' visits today'}</div></div>
+    <div class="sc" style="--acc:rgba(123,47,247,.08)"><div class="sl">Today's Calls</div><div class="sv" style="color:var(--purple)">${todayInteractions.length}</div><div class="ss">${todayInteractions.filter(i=>i.outcome==='happened').length} connected · ${allInteractions.length} total</div></div>`;
 
   // daily target bar
   const pct=Math.min(100,Math.round(todayLeads.length/dt*100));
@@ -1230,10 +1385,28 @@ function saveLead(){
   renderLeads();updateBadges();
 }
 
-function deleteLead(id){if(!confirm('Delete this lead?'))return;sv('leads',ld('leads').filter(x=>x.id!==id));renderLeads();updateBadges();toast('Lead deleted');}
+function deleteLead(id){
+  if(!confirm('Delete this lead?'))return;
+  const lead=ld('leads').find(x=>x.id===id);
+  sv('leads',ld('leads').filter(x=>x.id!==id));
+  // Clean up orphaned interactions
+  sv('interactions',ld('interactions').filter(x=>x.leadId!==id));
+  // Clean up orphaned follow-ups (linked by name)
+  if(lead)sv('fus',ld('fus').filter(x=>x.lead!==lead.name));
+  renderLeads();updateBadges();toast('Lead deleted');
+}
 function quickStatus(id,status){const leads=ld('leads');const l=leads.find(x=>x.id===id);if(l){l.status=status;sv('leads',leads);}renderLeads();renderNI();renderDead();updateBadges();toast('Status → '+status);}
 function restoreLead(id){quickStatus(id,'New');if(curPage==='notinterested')renderNI();else if(curPage==='dead')renderDead();}
-function purgeAllDead(){if(!confirm('Permanently delete ALL dead leads?'))return;sv('leads',ld('leads').filter(x=>x.status!=='Dead'));renderDead();toast('Purged');}
+function purgeAllDead(){
+  if(!confirm('Permanently delete ALL dead leads?'))return;
+  const deadLeads=ld('leads').filter(x=>x.status==='Dead');
+  const deadIds=new Set(deadLeads.map(x=>x.id));
+  const deadNames=new Set(deadLeads.map(x=>x.name));
+  sv('leads',ld('leads').filter(x=>x.status!=='Dead'));
+  sv('interactions',ld('interactions').filter(x=>!deadIds.has(x.leadId)));
+  sv('fus',ld('fus').filter(x=>!deadNames.has(x.lead)));
+  renderDead();toast('Purged');
+}
 
 function renderLeads(){
   const q=(document.getElementById('lead-q')||{}).value?.toLowerCase()||'';
@@ -1250,7 +1423,7 @@ function renderLeads(){
   drawerList=leads;
   tb.innerHTML=leads.map((l,i)=>`<tr>
     <td style="color:var(--text2)">${i+1}</td>
-    <td><b>${l.name}</b>${l.loc?`<div style="font-size:10.5px;color:var(--text2)">${l.loc}</div>`:''}</td>
+    <td><b style="cursor:pointer;text-decoration:underline;text-decoration-color:var(--border-vis);text-underline-offset:2px" onclick="openLeadDetail('${l.id}')">${l.name}</b>${l.loc?`<div style="font-size:10.5px;color:var(--text2)">${l.loc}</div>`:''}</td>
     <td>${l.phone}</td>
     <td style="font-size:11.5px">${l.source}</td>
     <td style="color:var(--gold)">${l.budget||'—'}</td>
@@ -1260,7 +1433,7 @@ function renderLeads(){
     <td style="color:var(--text2);font-size:12px">${l.assigned||'—'}</td>
     <td style="color:var(--text2)">${fmtD(l.date)}</td>
     <td><button class="btn bb sm" onclick="openDrawer(${i},'leads')">✏ Update</button></td>
-    <td><button class="btn bo sm" onclick="openLeadModal('${l.id}')">Edit</button></td>
+    <td style="white-space:nowrap"><button class="btn bg2 sm" onclick="openLeadDetail('${l.id}')">📋</button> <button class="btn bo sm" onclick="openLeadModal('${l.id}')">Edit</button></td>
   </tr>`).join('');
 }
 
@@ -1322,7 +1495,7 @@ function renderAssigned(){
       ${myLeads.length?`<div class="tw"><table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Budget</th><th>Status</th><th>Project</th><th>Added</th><th>Follow-Up Done?</th><th>Quick Update</th></tr></thead><tbody>
         ${myLeads.slice(0,30).map((l,i)=>{
           const hasFU=fus.some(f=>f.lead===l.name&&f.assignedTo===m.name);
-          return`<tr><td style="color:var(--text2)">${i+1}</td><td><b>${l.name}</b></td><td>${l.phone}</td><td style="color:var(--gold)">${l.budget||'—'}</td><td>${badge(l.status)}</td><td style="font-size:11.5px;color:var(--teal)">${l.linkedProject||'—'}</td><td style="color:var(--text2)">${fmtD(l.date)}</td><td>${hasFU?'<span style="color:var(--green)">✅ Yes</span>':'<span style="color:var(--orange)">⏳ No</span>'}</td><td><button class="btn bb sm" onclick="openFUForLead('${l.name}','${m.name}')">+ FU</button></td></tr>`;
+          return`<tr><td style="color:var(--text2)">${i+1}</td><td><b>${l.name}</b></td><td>${l.phone}</td><td style="color:var(--gold)">${l.budget||'—'}</td><td>${badge(l.status)}</td><td style="font-size:11.5px;color:var(--teal)">${l.linkedProject||'—'}</td><td style="color:var(--text2)">${fmtD(l.date)}</td><td>${hasFU?'<span style="color:var(--green)">✅ Yes</span>':'<span style="color:var(--orange)">⏳ No</span>'}</td><td style="white-space:nowrap"><button class="btn bg2 sm" onclick="openLeadDetail('${l.id}')">📋</button> <button class="btn bb sm" onclick="openFUForLead('${l.name}','${m.name}')">+ FU</button></td></tr>`;
         }).join('')}
       </tbody></table></div>`:'<div style="color:var(--text2);font-size:13px;padding:10px 0">No leads match filter.</div>'}
     </div>`;
@@ -2232,9 +2405,311 @@ function saveDrawerFU(leadId,leadName,agentName){
 }
 
 // ══════════════════════════════════════
+// LEAD DETAIL / FOLLOW-UP PANEL
+// ══════════════════════════════════════
+let currentDetailLead=null;
+let editingInteractionId=null;
+
+function openLeadDetail(leadId){
+  const leads=ld('leads');
+  const lead=leads.find(l=>l.id===leadId);
+  if(!lead){toast('Lead not found','err');return;}
+  currentDetailLead=lead;
+  editingInteractionId=null;
+
+  // Fill header
+  document.getElementById('ld-name').textContent=lead.name+' — ';
+  document.getElementById('ld-num').textContent=lead.phone||'';
+  document.getElementById('ld-phone').textContent=[lead.source,lead.ptype,lead.bhk,lead.budget?'Budget: '+lead.budget:''].filter(Boolean).join(' · ');
+  document.getElementById('ld-meta').textContent=[lead.assigned?'Assigned: '+lead.assigned:'Unassigned',lead.linkedProject?'Project: '+lead.linkedProject:'',lead.loc?'Pref: '+lead.loc:''].filter(Boolean).join(' · ');
+
+  // Reset form
+  document.getElementById('ld-type').value='Call';
+  document.getElementById('ld-date').value=today();
+  const now=new Date();
+  document.getElementById('ld-time').value=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('ld-location').value='';
+  document.getElementById('ld-remarks').value='';
+  document.getElementById('ld-next-date').value='';
+
+  // Show comm tab by default
+  switchLDTab('comm',document.querySelector('.ld-tab'));
+
+  // Render timeline
+  renderLDTimeline();
+
+  // Open
+  document.getElementById('ld-overlay').classList.add('open');
+  document.getElementById('ld-panel').classList.add('open');
+}
+
+function closeLeadDetail(){
+  document.getElementById('ld-overlay').classList.remove('open');
+  document.getElementById('ld-panel').classList.remove('open');
+  currentDetailLead=null;
+  editingInteractionId=null;
+}
+
+function switchLDTab(tab,el){
+  document.querySelectorAll('.ld-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+
+  const left=document.getElementById('ld-left-content');
+  const right=document.getElementById('ld-right-content');
+
+  if(tab==='info'){
+    // Show lead info on both columns
+    const l=currentDetailLead;
+    if(!l)return;
+    left.innerHTML=`
+      <div class="ld-info-grid">
+        <div class="ld-info-item"><div class="ld-info-label">Full Name</div><div class="ld-info-value">${l.name||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Phone</div><div class="ld-info-value">${l.phone||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Email</div><div class="ld-info-value">${l.email||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Source</div><div class="ld-info-value">${l.source||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Budget</div><div class="ld-info-value">${l.budget||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Property Type</div><div class="ld-info-value">${l.ptype||'—'}${l.bhk?' / '+l.bhk:''}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Location Pref</div><div class="ld-info-value">${l.loc||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Status</div><div class="ld-info-value">${l.status||'—'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Assigned To</div><div class="ld-info-value">${l.assigned||'Unassigned'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Linked Project</div><div class="ld-info-value">${l.linkedProject||'None'}</div></div>
+        <div class="ld-info-item"><div class="ld-info-label">Added On</div><div class="ld-info-value">${fmtD(l.date)}</div></div>
+      </div>
+      ${l.notes?`<div style="margin-top:16px"><div class="ld-form-label">Notes</div><div class="note-history" style="max-height:200px">${esc(l.notes)}</div></div>`:''}
+    `;
+    right.innerHTML=`
+      <div class="ld-timeline-title">All Interactions</div>
+      <div class="ld-timeline" id="ld-timeline"></div>
+    `;
+    renderLDTimeline();
+  } else {
+    // Restore comm form
+    left.innerHTML=`
+      <div class="ld-form-group">
+        <div class="ld-form-label">Type</div>
+        <select id="ld-type" style="width:100%">
+          <option>Call</option><option>WhatsApp</option><option>Site Visit</option><option>Email</option><option>SMS</option><option>Meeting</option>
+        </select>
+      </div>
+      <div class="ld-form-row">
+        <div class="ld-form-group"><div class="ld-form-label">Date</div><input type="date" id="ld-date" value="${today()}"></div>
+        <div class="ld-form-group"><div class="ld-form-label">Time</div><input type="time" id="ld-time" value="${new Date().getHours().toString().padStart(2,'0')+':'+new Date().getMinutes().toString().padStart(2,'0')}"></div>
+      </div>
+      <div class="ld-form-group"><div class="ld-form-label">Location</div><input type="text" id="ld-location" placeholder="e.g. Gurgaon, Office, etc."></div>
+      <div class="ld-form-group"><div class="ld-form-label">Notes / Remarks</div><textarea id="ld-remarks" placeholder="What happened? Any follow-up needed?" style="min-height:80px"></textarea></div>
+      <div class="ld-form-group"><div class="ld-form-label">Next Follow-Up Date</div><input type="date" id="ld-next-date"></div>
+      <div class="ld-actions">
+        <button class="ld-btn-red" onclick="logInteraction('not_happened')">✕ Did Not Happen</button>
+        <button class="ld-btn-green" onclick="logInteraction('happened')">✓ Happened</button>
+      </div>
+    `;
+    right.innerHTML=`
+      <div class="ld-timeline-title">All Interactions</div>
+      <div class="ld-timeline" id="ld-timeline"></div>
+    `;
+    renderLDTimeline();
+  }
+}
+
+function logInteraction(outcome){
+  if(!currentDetailLead)return;
+  const type=document.getElementById('ld-type').value;
+  const date=document.getElementById('ld-date').value;
+  const time=document.getElementById('ld-time').value;
+  const locText=document.getElementById('ld-location').value.trim();
+  const remarks=document.getElementById('ld-remarks').value.trim();
+  const nextDate=document.getElementById('ld-next-date').value;
+
+  if(!date){toast('Date is required','err');return;}
+
+  const interactions=ld('interactions');
+  const settings=ldO('settings');
+  const lcData=JSON.parse(localStorage.getItem('pk_license_v3')||'{}');
+  const agentName=lcData.name||settings.userName||'CRM Head';
+
+  if(editingInteractionId){
+    // Edit existing
+    const idx=interactions.findIndex(x=>x.id===editingInteractionId);
+    if(idx>=0){
+      interactions[idx]={...interactions[idx],type,date,time,location:locText,remarks,outcome,nextDate,updatedAt:new Date().toISOString()};
+      sv('interactions',interactions);
+      toast('Interaction updated ✓');
+    }
+    editingInteractionId=null;
+  } else {
+    // New interaction
+    const entry={
+      id:uid(),
+      leadId:currentDetailLead.id,
+      leadName:currentDetailLead.name,
+      type,date,time,location:locText,remarks,outcome,nextDate,
+      addedBy:agentName,
+      createdAt:new Date().toISOString()
+    };
+    interactions.unshift(entry);
+    sv('interactions',interactions);
+
+    // Auto-create a follow-up if nextDate is set
+    if(nextDate){
+      const fus=ld('fus');
+      fus.unshift({
+        id:uid(),
+        lead:currentDetailLead.name,
+        task:remarks||type+' follow-up',
+        date:nextDate,
+        priority:'Medium',
+        assignedTo:currentDetailLead.assigned||'',
+        status:'pending',
+        created:today(),
+        fromInteractionId:entry.id
+      });
+      sv('fus',fus);
+      updateBadges();
+    }
+
+    // Update lead status if it's still New
+    if(currentDetailLead.status==='New'){
+      const leads=ld('leads');
+      const l=leads.find(x=>x.id===currentDetailLead.id);
+      if(l){l.status='Contacted';sv('leads',leads);currentDetailLead.status='Contacted';}
+    }
+
+    toast(outcome==='happened'?type+' logged ✓':type+' — Did not happen, noted');
+  }
+
+  // Reset form
+  document.getElementById('ld-remarks').value='';
+  document.getElementById('ld-next-date').value='';
+  document.getElementById('ld-location').value='';
+  editingInteractionId=null;
+
+  renderLDTimeline();
+  if(curPage==='leads')renderLeads();
+  if(curPage==='followups')renderFollowups();
+}
+
+function renderLDTimeline(){
+  if(!currentDetailLead)return;
+  const el=document.getElementById('ld-timeline');
+  if(!el)return;
+
+  const interactions=ld('interactions').filter(x=>x.leadId===currentDetailLead.id);
+  // Also pull in old follow-ups for this lead
+  const oldFUs=ld('fus').filter(f=>f.lead===currentDetailLead.name||f.lead===currentDetailLead.id);
+
+  // Merge into timeline entries
+  let timeline=[];
+
+  interactions.forEach(i=>{
+    timeline.push({
+      id:i.id,
+      type:i.type,
+      date:i.date,
+      time:i.time||'',
+      location:i.location||'',
+      outcome:i.outcome,
+      remarks:i.remarks||'',
+      addedBy:i.addedBy||'—',
+      createdAt:i.createdAt,
+      source:'interaction',
+      nextDate:i.nextDate||''
+    });
+  });
+
+  oldFUs.forEach(f=>{
+    // Skip follow-ups auto-created by an interaction (they're already shown via the interaction)
+    if(f.fromInteractionId)return;
+    // Don't duplicate if already in interactions (fallback check)
+    if(!interactions.some(i=>i.remarks===f.task&&i.date===f.date)){
+      timeline.push({
+        id:f.id,
+        type:'Follow-Up',
+        date:f.date,
+        time:'',
+        location:'',
+        outcome:f.status==='done'?'happened':'pending',
+        remarks:f.task||'',
+        addedBy:f.assignedTo||'—',
+        createdAt:f.created||f.date,
+        source:'followup'
+      });
+    }
+  });
+
+  // Sort by date descending
+  timeline.sort((a,b)=>{
+    const da=a.date+(a.time||'99:99');
+    const db=b.date+(b.time||'99:99');
+    return db.localeCompare(da);
+  });
+
+  if(!timeline.length){
+    el.innerHTML='<div class="ld-empty">No interactions yet. Log the first one!</div>';
+    return;
+  }
+
+  el.innerHTML=timeline.map(t=>{
+    const cls=t.outcome==='happened'?'happened':t.outcome==='not_happened'?'not-happened':'pending';
+    const badgeCls=t.outcome==='happened'?'yes':t.outcome==='not_happened'?'no':'pend';
+    const badgeText=t.outcome==='happened'?'YES':t.outcome==='not_happened'?'NO':'PENDING';
+    const typeIcon=t.type==='Call'?'📞':t.type==='WhatsApp'?'💬':t.type==='Site Visit'?'🏠':t.type==='Email'?'📧':t.type==='SMS'?'📱':t.type==='Meeting'?'🤝':'📋';
+
+    const fmtDate=fmtD(t.date);
+    const fmtTime=t.time?', '+t.time:'';
+    const editBtn=t.source==='interaction'?`<div style="position:absolute;top:2px;right:0;display:flex;gap:4px"><button class="ld-tl-edit" onclick="editInteraction('${t.id}')" title="Edit">✏</button><button class="ld-tl-edit" onclick="deleteInteraction('${t.id}')" title="Delete" style="color:var(--brand-coral)">🗑</button></div>`:'';
+
+    return `<div class="ld-tl-item ${cls}">
+      <div class="ld-tl-dot"></div>
+      ${editBtn}
+      <div class="ld-tl-type">${typeIcon} ${esc(t.type)}</div>
+      <div class="ld-tl-date">${fmtDate}${fmtTime}${t.location?' · '+esc(t.location):''}</div>
+      <div class="ld-tl-agent">Added by : ${esc(t.addedBy)}</div>
+      <span class="ld-tl-badge ${badgeCls}">${badgeText}</span>
+      ${t.remarks?`<div class="ld-tl-note">${esc(t.remarks)}</div>`:''}
+      ${t.nextDate?`<div style="font-size:11px;color:var(--accent-gold);margin-top:4px">↳ Next Follow-Up: ${fmtD(t.nextDate)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function editInteraction(intId){
+  const interactions=ld('interactions');
+  const i=interactions.find(x=>x.id===intId);
+  if(!i)return;
+
+  // Switch to comm tab
+  switchLDTab('comm',document.querySelector('.ld-tab'));
+
+  // Fill form with existing data
+  setTimeout(()=>{
+    document.getElementById('ld-type').value=i.type||'Call';
+    document.getElementById('ld-date').value=i.date||today();
+    document.getElementById('ld-time').value=i.time||'';
+    document.getElementById('ld-location').value=i.location||'';
+    document.getElementById('ld-remarks').value=i.remarks||'';
+    document.getElementById('ld-next-date').value=i.nextDate||'';
+    editingInteractionId=intId;
+    toast('Editing interaction — update & click a button to save');
+  },50);
+}
+
+function deleteInteraction(intId){
+  if(!confirm('Delete this interaction?'))return;
+  const interactions=ld('interactions').filter(x=>x.id!==intId);
+  sv('interactions',interactions);
+  renderLDTimeline();
+  toast('Interaction deleted');
+}
+
+// ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
+  // FIX 9: Trim interactions if they exceed 2000 (keep newest)
+  const allInt=ld('interactions');
+  if(allInt.length>2000){
+    allInt.sort((a,b)=>(b.createdAt||b.date).localeCompare(a.createdAt||a.date));
+    sv('interactions',allInt.slice(0,2000));
+  }
   populateDropdowns();
   renderDashboard();
   updateBadges();
@@ -2405,13 +2880,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Enter key support on activation form
+// Enter key support on activation form + Escape to close panels
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
     const wall = document.getElementById('license-wall');
     if (wall && wall.style.display !== 'none') {
       activateLicense();
     }
+  }
+  if (e.key === 'Escape') {
+    // Close lead detail panel first
+    if(document.getElementById('ld-panel').classList.contains('open')){
+      closeLeadDetail();return;
+    }
+    // Close drawer if open
+    if(document.getElementById('drawer').classList.contains('open')){
+      closeDrawer();return;
+    }
+    // Close any open modal
+    document.querySelectorAll('.mo.open').forEach(function(m){
+      var id=m.id.replace('mo-','');
+      closeModal(id);
+    });
   }
 });
 </script>
