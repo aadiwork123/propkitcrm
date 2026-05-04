@@ -2937,7 +2937,7 @@ async function activateLicense() {
     const snapshot = await ref.once('value');
 
     if (!snapshot.exists()) {
-      // ── First activation ever — register this device ──
+      // ── First activation ever — register this device (paid license) ──
       await ref.set({
         device    : fp,
         name      : name,
@@ -2949,10 +2949,39 @@ async function activateLicense() {
 
     } else {
       const record = snapshot.val();
-      if (record.device === fp) {
+
+      // ── Check if revoked ──
+      if (record.revoked === true) {
+        setActivateBtn(false);
+        showErr('This license has been revoked. Contact <a href="tel:' + SUPPORT + '" style="color:#FF6B6B">' + SUPPORT + '</a>');
+        return;
+      }
+
+      // ── Trial pre-record (device = PENDING, set by seller) ──
+      if (record.device === 'PENDING') {
+        await ref.update({
+          device    : fp,
+          name      : name,
+          phone     : cleanPhone(phone),
+          activated : new Date().toISOString()
+          // trialExpiry stays as set by seller ✅
+        });
+        setActivateBtn(false);
+        saveAndUnlock(name, phone, key, fp);
+        // ── Also save trialExpiry locally for offline expiry check ──
+        if (record.trialExpiry) {
+          try {
+            const lcData = JSON.parse(localStorage.getItem(LC_STORE) || '{}');
+            lcData.trialExpiry = record.trialExpiry;
+            localStorage.setItem(LC_STORE, JSON.stringify(lcData));
+          } catch(ex) {}
+        }
+
+      } else if (record.device === fp) {
         // ── Same device — allow ──
         setActivateBtn(false);
         saveAndUnlock(name, phone, key, fp);
+
       } else {
         // ── Different device — BLOCK ──
         setActivateBtn(false);
@@ -2978,6 +3007,12 @@ function checkLicense() {
   try {
     const d = JSON.parse(raw);
     if (!validateKey(d.name, d.phone, d.key)) return false;
+    // ── Offline trial expiry check ──
+    if (d.trialExpiry && new Date() > new Date(d.trialExpiry)) {
+      localStorage.removeItem(LC_STORE);
+      localStorage.removeItem(LC_FP);
+      return false; // shows license wall with expired trial
+    }
     const fp       = deviceFP();
     const storedFP = localStorage.getItem(LC_FP);
     if (storedFP && storedFP !== fp) {
@@ -3001,22 +3036,48 @@ async function verifyWithFirebase(d, fp) {
 
     if (snapshot.exists()) {
       const record = snapshot.val();
-      if (record.device !== fp) {
-        // Device mismatch found — kick out
+
+      // ── Check if license revoked by seller ──
+      if (record.revoked === true) {
+        localStorage.removeItem(LC_STORE);
+        localStorage.removeItem(LC_FP);
+        alert('Your license has been revoked by the seller.\nNeed help? Contact: ' + SUPPORT);
+        location.reload();
+        return;
+      }
+
+      // ── Check trial expiry ──
+      if (record.trialExpiry) {
+        const expiry = new Date(record.trialExpiry);
+        if (new Date() > expiry) {
+          localStorage.removeItem(LC_STORE);
+          localStorage.removeItem(LC_FP);
+          alert(
+            'Your 7-day free trial has expired!\n\n' +
+            'Purchase PropKit CRM full license at ₹999.\n' +
+            'Contact: ' + SUPPORT
+          );
+          location.reload();
+          return;
+        }
+      }
+
+      // ── Device mismatch check ──
+      if (record.device !== fp && record.device !== 'PENDING') {
         localStorage.removeItem(LC_STORE);
         localStorage.removeItem(LC_FP);
         alert('This license key is registered to a different device. Contact ' + SUPPORT);
         location.reload();
+        return;
       }
-      // else: same device, all good, stay logged in
+      // else: same device, all good, stay logged in ✅
+
     } else {
-      // No Firebase record yet (old activation) — create one now
-      await db.ref('pk_activations/' + keyHash).set({
-        device    : fp,
-        name      : d.name,
-        phone     : d.phone,
-        activated : d.activated || new Date().toISOString()
-      });
+      // ── No Firebase record = license was revoked (record deleted) ──
+      localStorage.removeItem(LC_STORE);
+      localStorage.removeItem(LC_FP);
+      alert('License not found or has been revoked. Contact: ' + SUPPORT);
+      location.reload();
     }
   } catch(e) {
     // Firebase unreachable — silently ignore, user stays logged in
